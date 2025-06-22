@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Captions Display</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cherry+Cream+Soda&display=swap');
+        .cherry-cream-soda-regular {
+            font-family: "Cherry Cream Soda", system-ui;
+            font-weight: 400;
+            font-style: normal;
+        }
+    </style>
+    <style>        html {
+            font-family: 'Cherry Cream Soda', system-ui;
+            background: transparent !important;
+            background-color: rgba(0, 0, 0, 0) !important;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            background: transparent !important;
+            background-color: rgba(0, 0, 0, 0) !important;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+          .captions-container {
+            width: 100%;
+            max-width: fit-content;
+            padding: 20px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            background: transparent !important;
+        }        .caption-line {
+            background: none;
+            max-height: 100px;
+            color: white;
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 25px;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.4;
+            animation: slideUp 0.3s ease-out;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            text-shadow: 
+                2px 2px 0px #000,
+                -2px -2px 0px #000,
+                2px -2px 0px #000,
+                -2px 2px 0px #000,
+                0px 2px 0px #000,
+                2px 0px 0px #000,
+                0px -2px 0px #000,
+                -2px 0px 0px #000,
+                1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .caption-languages {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }        .caption-lang {
+            background: none;
+            width: fit-content;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 22px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.3;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            text-shadow: 
+                2px 2px 0px #000,
+                -2px -2px 0px #000,
+                2px -2px 0px #000,
+                -2px 2px 0px #000,
+                0px 2px 0px #000,
+                2px 0px 0px #000,
+                0px -2px 0px #000,
+                -2px 0px 0px #000,
+                1px 1px 2px rgba(0,0,0,0.8);
+        }
+        
+        .caption-lang::before {
+            content: attr(data-lang);
+            text-shadow: none;
+            position: absolute;
+            top: -8px;
+            right: 12px;
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+        
+        .caption-lang.primary {
+            border-color: rgba(74, 144, 226, 0.6);
+            background: rgba(182, 155, 219, 0.822);
+        }
+        
+        .caption-lang.secondary {
+            border-color: rgba(156, 39, 176, 0.6);
+            background: rgba(156, 39, 176, 0.15);
+        }
+        
+        .caption-lang.tertiary {
+            border-color: rgba(255, 152, 0, 0.6);
+            background: rgba(255, 152, 0, 0.15);
+        }
+        
+        .caption-line.interim {
+            background: rgba(182, 155, 219, 0.822);
+            max-height: 100px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            /* animation: pulse 1s infinite; */
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        
+        .caption-line:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .caption-line {
+                font-size: 20px;
+                padding: 10px 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .caption-line {
+                font-size: 18px;
+                padding: 8px 12px;
+            }
+        }
+        
+        /* OBS-friendly styling */
+        .captions-container {
+            position: relative;
+            z-index: 1000;
+        }
+        
+        /* Fade out old captions */
+        .caption-line.old {
+            animation: fadeOut 2s ease-out forwards;
+        }        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+        
+        /* OBS Browser Source Transparency Fix */
+        html, body {
+            background: rgba(0, 0, 0, 0) !important;
+            background-color: rgba(0, 0, 0, 0) !important;
+        }
+        
+        /* Ensure OBS detects transparency correctly */
+        .captions-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0);
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <div class="captions-container" id="captionsContainer">
+        <!-- Captions will be dynamically added here -->
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>        const socket = io();
+        const captionsContainer = document.getElementById('captionsContainer');
+        
+        // OBS Browser Source Transparency Fix
+        function forceOBSTransparency() {
+            document.documentElement.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+            document.body.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+            
+            // Force CSS to be applied
+            document.documentElement.style.background = 'transparent';
+            document.body.style.background = 'transparent';
+            
+            // Set explicit alpha channel
+            if (window.getComputedStyle) {
+                const htmlStyle = window.getComputedStyle(document.documentElement);
+                const bodyStyle = window.getComputedStyle(document.body);
+                console.log('HTML background:', htmlStyle.backgroundColor);
+                console.log('Body background:', bodyStyle.backgroundColor);
+            }
+        }
+        
+        // Apply transparency fix immediately and on load
+        forceOBSTransparency();
+        window.addEventListener('load', forceOBSTransparency);
+        
+        let currentInterimElement = null;
+        let captionHistory = [];
+        const MAX_VISIBLE_LINES = 3;
+        const CAPTION_TIMEOUT = 8000; // 8 seconds
+          socket.on('caption-update', (data) => {
+            console.log('Received caption:', data);
+            
+            if (data.translations && data.languages) {
+                // Multi-language caption
+                displayMultiLanguageCaption(data);
+            } else {
+                // Single language caption (fallback)
+                displayCaption(data.text, data.isFinal);
+            }
+        });
+        
+        socket.on('captions-cleared', () => {
+            clearAllCaptions();
+        });
+        
+        function displayCaption(text, isFinal) {
+            if (!text.trim()) return;
+            
+            if (isFinal) {
+                // Remove any existing interim caption
+                if (currentInterimElement) {
+                    currentInterimElement.remove();
+                    currentInterimElement = null;
+                }
+                
+                // Create final caption
+                const captionElement = createCaptionElement(text, false);
+                captionsContainer.appendChild(captionElement);
+                
+                // Add to history
+                captionHistory.push({
+                    element: captionElement,
+                    timestamp: Date.now()
+                });
+                
+                // Clean up old captions
+                cleanupOldCaptions();
+                
+                // Auto-remove after timeout
+                setTimeout(() => {
+                    if (captionElement.parentNode) {
+                        captionElement.classList.add('old');
+                        setTimeout(() => {
+                            if (captionElement.parentNode) {
+                                captionElement.remove();
+                            }
+                        }, 2000);
+                    }
+                }, CAPTION_TIMEOUT);
+                
+            } else {
+                // Handle interim (temporary) caption
+                if (currentInterimElement) {
+                    currentInterimElement.textContent = text;
+                } else {
+                    currentInterimElement = createCaptionElement(text, true);
+                    captionsContainer.appendChild(currentInterimElement);
+                }
+            }
+        }
+        
+        function createCaptionElement(text, isInterim) {
+            const element = document.createElement('div');
+            element.className = `caption-line ${isInterim ? 'interim' : ''}`;
+            element.textContent = text;
+            return element;
+        }
+        
+        function cleanupOldCaptions() {
+            // Remove excess captions beyond MAX_VISIBLE_LINES
+            const finalCaptions = captionsContainer.querySelectorAll('.caption-line:not(.interim)');
+            if (finalCaptions.length > MAX_VISIBLE_LINES) {
+                for (let i = 0; i < finalCaptions.length - MAX_VISIBLE_LINES; i++) {
+                    finalCaptions[i].classList.add('old');
+                    setTimeout(() => {
+                        if (finalCaptions[i].parentNode) {
+                            finalCaptions[i].remove();
+                        }
+                    }, 2000);
+                }
+            }
+        }
+        
+        function clearAllCaptions() {
+            captionsContainer.innerHTML = '';
+            currentInterimElement = null;
+            captionHistory = [];
+        }
+        
+        function displayMultiLanguageCaption(data) {
+            if (!data.isFinal) {
+                // Handle interim results - only show in primary language
+                const primaryLang = data.languages[0];
+                const text = data.translations[primaryLang] || data.text;
+                displayCaption(text, false);
+                return;
+            }
+            
+            // Remove any existing interim caption
+            if (currentInterimElement) {
+                currentInterimElement.remove();
+                currentInterimElement = null;
+            }
+            
+            // Create multi-language caption container
+            const captionContainer = document.createElement('div');
+            captionContainer.className = 'caption-line';
+            captionContainer.style.background = 'transparent';
+            captionContainer.style.border = 'none';
+            captionContainer.style.padding = '8px';
+            
+            const languagesContainer = document.createElement('div');
+            languagesContainer.className = 'caption-languages';
+            
+            // Language names mapping
+            const languageNames = {
+                'en': 'EN',
+                'es': 'ES',
+                'fr': 'FR', 
+                'de': 'DE',
+                'it': 'IT',
+                'pt': 'PT',
+                'ja': 'JA',
+                'ko': 'KO',
+                'zh': 'ZH'
+            };
+            
+            // Style classes for different languages
+            const styleClasses = ['primary', 'secondary', 'tertiary'];
+            
+            // Create caption for each language
+            data.languages.forEach((langCode, index) => {
+                const text = data.translations[langCode];
+                if (text && text.trim()) {
+                    const langElement = document.createElement('div');
+                    langElement.className = `caption-lang ${styleClasses[index % styleClasses.length]}`;
+                    langElement.setAttribute('data-lang', languageNames[langCode] || langCode.toUpperCase());
+                    langElement.textContent = text;
+                    languagesContainer.appendChild(langElement);
+                }
+            });
+            
+            captionContainer.appendChild(languagesContainer);
+            captionsContainer.appendChild(captionContainer);
+            
+            // Add to history
+            captionHistory.push({
+                element: captionContainer,
+                timestamp: Date.now()
+            });
+            
+            // Clean up old captions
+            cleanupOldCaptions();
+            
+            // Auto-remove after timeout
+            setTimeout(() => {
+                if (captionContainer.parentNode) {
+                    captionContainer.classList.add('old');
+                    setTimeout(() => {
+                        if (captionContainer.parentNode) {
+                            captionContainer.remove();
+                        }
+                    }, 2000);
+                }
+            }, CAPTION_TIMEOUT);
+        }
+        
+        // Connection status handling
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
+        
+        socket.on('disconnect', () => {
+            console.log('Disconnected from server');
+        });
+        
+        // Clean up old captions periodically
+        setInterval(() => {
+            const now = Date.now();
+            captionHistory = captionHistory.filter(caption => {
+                if (now - caption.timestamp > CAPTION_TIMEOUT * 2) {
+                    if (caption.element.parentNode) {
+                        caption.element.classList.add('old');
+                        setTimeout(() => {
+                            if (caption.element.parentNode) {
+                                caption.element.remove();
+                            }
+                        }, 2000);
+                    }
+                    return false;
+                }
+                return true;
+            });
+        }, 5000);
+    </script>
+</body>
+</html>

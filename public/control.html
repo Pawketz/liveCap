@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Captions - Control Panel</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.5em;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .control-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .control-group h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+        
+        .btn-start {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        
+        .btn-stop {
+            background: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+            color: white;
+        }
+        
+        .btn-clear {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .status.listening {
+            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .preview {
+            background: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            min-height: 200px;
+            font-family: Arial, sans-serif;
+            font-size: 1.2em;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .preview h3 {
+            margin-top: 0;
+            color: #ccc;
+            font-size: 1em;
+            border-bottom: 1px solid #444;
+            padding-bottom: 10px;
+        }
+        
+        .settings {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .settings label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .settings select, .settings input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+          .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .microphone-meter {
+            width: 100%;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .mic-level-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #ffc107, #dc3545);
+            width: 0%;
+            transition: width 0.1s ease;
+            border-radius: 10px;
+        }
+        
+        .troubleshooting {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .troubleshooting h4 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        
+        .troubleshooting ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+          .troubleshooting li {
+            margin: 5px 0;
+            color: #424242;
+        }
+        
+        .background-info {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .background-info h4 {
+            margin-top: 0;
+            color: #856404;
+        }
+          .background-info p {
+            margin: 5px 0;
+            color: #856404;
+        }
+        
+        .language-checkboxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            font-weight: normal;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 5px;
+            transition: background-color 0.2s ease;
+        }
+        
+        .checkbox-label:hover {
+            background-color: #e9ecef;
+        }
+        
+        .checkbox-label input[type="checkbox"] {
+            margin-right: 8px;
+            width: auto;
+            cursor: pointer;
+        }
+          .checkbox-label input[type="checkbox"]:checked + span {
+            font-weight: 600;
+            color: #28a745;
+        }
+        
+        .session-status {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            margin: 10px 0;
+            border: 2px solid #6c757d;
+            background: #f8f9fa;
+            color: #6c757d;
+        }
+        
+        .session-status.active {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .session-status.error {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎛️ Control Panel</h1>
+        
+        <div id="errorDiv" class="error"></div>
+        
+        <div class="status" id="statusDiv">
+            Ready to start
+        </div>          <div class="settings">
+            <label for="languageSelect">Input Language (Speech Recognition):</label>
+            <select id="languageSelect">
+                <option value="en-US">English (US)</option>
+                <option value="en-GB">English (UK)</option>
+                <option value="es-ES">Spanish</option>
+                <option value="fr-FR">French</option>
+                <option value="de-DE">German</option>
+                <option value="it-IT">Italian</option>
+                <option value="pt-BR">Portuguese (Brazil)</option>
+                <option value="ja-JP">Japanese</option>
+                <option value="ko-KR">Korean</option>
+                <option value="zh-CN">Chinese (Simplified)</option>
+            </select>
+              <label for="outputLanguages">Output Languages (Caption Display):</label>
+            <div class="language-checkboxes" id="outputLanguages">
+                <label class="checkbox-label">
+                    <input type="checkbox" value="en" data-name="English" checked><span>English</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" value="es" data-name="Spanish"><span>Spanish</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" value="fr" data-name="French"><span>French</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" value="de" data-name="German"><span>German</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" value="it" data-name="Italian"><span>Italian</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" value="pt" data-name="Portuguese"><span>Portuguese</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" value="ja" data-name="Japanese"><span>Japanese</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" value="ko" data-name="Korean"><span>Korean</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" value="zh" data-name="Chinese"><span>Chinese</span>
+                </label>
+            </div>
+              <label for="microphoneSelect">Microphone Source:</label>
+            <select id="microphoneSelect">
+                <option value="">Loading microphones...</option>
+            </select>
+            
+            <label for="microphoneLevel">Microphone Level:</label>
+            <div class="microphone-meter">
+                <div id="microphoneLevel" class="mic-level-bar"></div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <h3>🎤 Recording</h3>
+                <button id="startBtn" class="btn btn-start">Start Listening</button>
+                <button id="stopBtn" class="btn btn-stop" disabled>Stop Listening</button>
+            </div>            <div class="control-group">
+                <h3>🧹 Management</h3>
+                <button id="clearBtn" class="btn btn-clear">Clear Captions</button>
+                <button id="testBtn" class="btn btn-start">Test Caption</button>
+            </div>
+            
+            <div class="control-group">
+                <h3>📄 Session Log</h3>
+                <div id="sessionStatus" class="session-status">No active session</div>
+                <small>Automatically starts/stops with listening</small>
+            </div>
+        </div>
+          <div class="preview">
+            <h3>Caption Preview:</h3>
+            <div id="captionPreview">Captions will appear here...</div>
+        </div>
+          <div class="troubleshooting">
+            <h4>🔧 Troubleshooting "No Speech" Error:</h4>
+            <ul>
+                <li><strong>Check microphone:</strong> Make sure your microphone is connected and working</li>
+                <li><strong>Select correct mic:</strong> Choose the right microphone from the dropdown above</li>
+                <li><strong>Allow permissions:</strong> Grant microphone access when prompted by the browser</li>
+                <li><strong>Speak clearly:</strong> Speak directly into the microphone at normal volume</li>
+                <li><strong>Check levels:</strong> Watch the microphone level meter above</li>
+                <li><strong>Try different browser:</strong> Chrome and Edge work best</li>
+                <li><strong>Restart recognition:</strong> Stop and start listening if issues persist</li>
+            </ul>
+        </div>
+          <div class="background-info">
+            <h4>📱 Background Operation:</h4>
+            <p><strong>✅ This app will continue working when minimized!</strong></p>
+            <p>• Microphone monitoring continues in background</p>
+            <p>• Speech recognition stays active</p>
+            <p>• Captions will still appear in OBS even if browser is minimized</p>
+            <p>• Wake lock prevents system from sleeping (if supported)</p>
+        </div>
+        
+        <div class="background-info">
+            <h4>🌍 Multi-Language Features:</h4>
+            <p><strong>✅ Real-time translation support!</strong></p>
+            <p>• Select multiple output languages above</p>
+            <p>• Captions will show in all selected languages simultaneously</p>
+            <p>• Perfect for international streams</p>
+            <p>• Translations are cached for better performance</p>
+            <p>• Example: Speak in English, show English + Spanish captions</p>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();        let recognition;
+        let isListening = false;
+        let audioContext;
+        let analyser;
+        let microphone;
+        let dataArray;
+        let micLevelInterval;        let currentStream;
+        let availableMicrophones = [];
+        let wakeLock = null;
+        let selectedOutputLanguages = ['en'];
+        let translationCache = new Map();        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const testBtn = document.getElementById('testBtn');
+        const statusDiv = document.getElementById('statusDiv');
+        const captionPreview = document.getElementById('captionPreview');
+        const languageSelect = document.getElementById('languageSelect');
+        const errorDiv = document.getElementById('errorDiv');
+        const microphoneLevel = document.getElementById('microphoneLevel');
+        const microphoneSelect = document.getElementById('microphoneSelect');
+        const outputLanguages = document.getElementById('outputLanguages');
+        const sessionStatus = document.getElementById('sessionStatus');
+        
+        // Debug: Check if elements were found
+        console.log('DOM elements check:');
+        console.log('startBtn:', startBtn);
+        console.log('stopBtn:', stopBtn);
+        console.log('testBtn:', testBtn);
+        
+        let currentSessionFile = null;
+        
+        // Check for browser support
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            showError('Speech recognition not supported in this browser. Please use Chrome, Edge, or Safari.');
+        } else {
+            // Initialize speech recognition
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+              recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.maxAlternatives = 1;
+            recognition.lang = languageSelect.value;
+            
+            // Add sensitivity settings
+            if ('webkitSpeechRecognition' in window) {
+                recognition.serviceURI = 'wss://www.google.com/speech-api/full-duplex/v1/up';
+            }
+            
+            recognition.onstart = () => {
+                console.log('Speech recognition started');
+                isListening = true;
+                updateUI();
+            };            recognition.onend = () => {
+                console.log('Speech recognition ended, isListening:', isListening);
+                
+                // Only auto-restart if we're still supposed to be listening
+                // (isListening will be false if user clicked stop)
+                if (isListening) {
+                    console.log('Restarting speech recognition...');
+                    setTimeout(() => {
+                        if (isListening) {
+                            try {
+                                recognition.start();
+                            } catch (error) {
+                                console.error('Failed to restart recognition:', error);
+                                if (error.name === 'InvalidStateError') {
+                                    // Recognition is already running, just update UI
+                                    return;
+                                }
+                                showError('Failed to restart speech recognition. Please try stopping and starting again.');
+                                isListening = false;
+                                updateUI();
+                            }
+                        }
+                    }, 100);
+                } else {
+                    console.log('Not restarting - listening was stopped intentionally');
+                    updateUI();
+                }
+            };
+              recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+                
+                // Handle specific error types
+                switch(event.error) {
+                    case 'no-speech':
+                        // Don't show error for no-speech, just restart
+                        console.log('No speech detected, continuing...');
+                        if (isListening) {
+                            // Restart recognition after a short delay
+                            setTimeout(() => {
+                                if (isListening) {
+                                    try {
+                                        recognition.start();
+                                    } catch (e) {
+                                        console.log('Recognition restart failed:', e);
+                                    }
+                                }
+                            }, 1000);
+                        }
+                        break;
+                    case 'audio-capture':
+                        showError('Microphone access denied or not available. Please check your microphone settings.');
+                        isListening = false;
+                        updateUI();
+                        break;
+                    case 'not-allowed':
+                        showError('Microphone permission denied. Please allow microphone access and refresh the page.');
+                        isListening = false;
+                        updateUI();
+                        break;
+                    case 'network':
+                        showError('Network error. Please check your internet connection.');
+                        isListening = false;
+                        updateUI();
+                        break;
+                    case 'aborted':
+                        // Recognition was stopped intentionally
+                        console.log('Speech recognition aborted');
+                        break;
+                    default:
+                        showError(`Speech recognition error: ${event.error}`);
+                        isListening = false;
+                        updateUI();
+                        break;
+                }
+            };
+            
+            recognition.onresult = (event) => {
+                let finalTranscript = '';
+                let interimTranscript = '';
+                
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    const transcript = event.results[i][0].transcript;
+                    
+                    if (event.results[i].isFinal) {
+                        finalTranscript += transcript;
+                    } else {
+                        interimTranscript += transcript;
+                    }
+                }
+                  if (finalTranscript) {
+                    const captionData = {
+                        text: finalTranscript,
+                        timestamp: new Date().toISOString(),
+                        isFinal: true,
+                        outputLanguages: selectedOutputLanguages
+                    };
+                    
+                    // Translate to selected languages
+                    translateAndSendCaption(captionData);
+                    updatePreview(finalTranscript, true);
+                }
+                
+                if (interimTranscript) {
+                    const captionData = {
+                        text: interimTranscript,
+                        timestamp: new Date().toISOString(),
+                        isFinal: false,
+                        outputLanguages: selectedOutputLanguages
+                    };
+                    
+                    // Send interim without translation (too fast)
+                    socket.emit('speech-data', captionData);
+                    updatePreview(interimTranscript, false);
+                }
+            };
+        }        // Event listeners
+        console.log('Attaching event listeners...');
+        console.log('startBtn element:', startBtn);
+        console.log('stopBtn element:', stopBtn);
+        
+        if (startBtn) {
+            startBtn.addEventListener('click', startListening);
+            console.log('Start button event listener attached');
+            
+            // Also try direct onclick as backup
+            startBtn.onclick = function() {
+                console.log('Start button clicked via onclick');
+                startListening();
+            };
+        } else {
+            console.error('startBtn element not found!');
+        }
+        
+        if (stopBtn) {
+            stopBtn.addEventListener('click', stopListening);
+            console.log('Stop button event listener attached');
+        } else {
+            console.error('stopBtn element not found!');
+        }
+        
+        clearBtn.addEventListener('click', clearCaptions);
+        testBtn.addEventListener('click', sendTestCaption);
+        
+        console.log('Event listeners attached successfully');
+          languageSelect.addEventListener('change', () => {
+            if (recognition) {
+                recognition.lang = languageSelect.value;
+            }
+        });
+          microphoneSelect.addEventListener('change', () => {
+            const selectedDeviceId = microphoneSelect.value;
+            if (selectedDeviceId) {
+                switchMicrophone(selectedDeviceId);
+            }
+        });
+        
+        // Handle output language selection
+        outputLanguages.addEventListener('change', (e) => {
+            if (e.target.type === 'checkbox') {
+                updateSelectedOutputLanguages();
+            }
+        });        function startListening() {
+            console.log('startListening called');
+            console.log('recognition exists:', !!recognition);
+            console.log('isListening:', isListening);
+            
+            if (recognition && !isListening) {
+                try {
+                    // Start session logging
+                    socket.emit('start-session');
+                    
+                    recognition.start();
+                    hideError();
+                } catch (error) {
+                    console.error('Error starting recognition:', error);
+                    showError('Failed to start speech recognition. Make sure microphone access is allowed.');
+                }
+            } else {
+                if (!recognition) {
+                    console.error('Recognition object not initialized');
+                    showError('Speech recognition not initialized. Please refresh the page.');
+                }
+                if (isListening) {
+                    console.log('Already listening');
+                }
+            }
+        }
+          function stopListening() {
+            console.log('stopListening called');
+            console.log('recognition exists:', !!recognition);
+            console.log('isListening:', isListening);
+            
+            if (recognition) {
+                // Force stop the listening state first
+                isListening = false;
+                
+                try {
+                    recognition.stop();
+                    recognition.abort(); // Force abort to ensure it stops immediately
+                } catch (error) {
+                    console.error('Error stopping recognition:', error);
+                }
+                
+                // Update UI immediately
+                updateUI();
+                
+                // Stop session logging
+                socket.emit('stop-session');
+                
+                console.log('Recognition stopped, isListening set to false');
+            } else {
+                console.error('Recognition object not initialized');
+            }
+        }
+          function clearCaptions() {
+            socket.emit('clear-captions');
+            captionPreview.textContent = 'Captions will appear here...';
+        }
+        
+        function sendTestCaption() {
+            console.log('Sending test caption...');
+            updateSelectedOutputLanguages(); // Make sure we have current selections
+            
+            const testCaptionData = {
+                text: 'This is a test caption to verify the system is working properly.',
+                timestamp: new Date().toISOString(),
+                isFinal: true, // Mark as final so it gets logged
+                outputLanguages: selectedOutputLanguages
+            };
+            
+            // Send the test caption
+            socket.emit('speech-data', testCaptionData);
+            updatePreview(testCaptionData.text, true);
+        }
+        
+        function updateUI() {
+            if (isListening) {
+                statusDiv.textContent = '🎤 Listening...';
+                statusDiv.className = 'status listening';
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            } else {
+                statusDiv.textContent = 'Ready to start';
+                statusDiv.className = 'status';
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        }
+        
+        function updatePreview(text, isFinal) {
+            if (isFinal) {
+                captionPreview.textContent += text + ' ';
+            }
+            // Auto-scroll to bottom
+            captionPreview.scrollTop = captionPreview.scrollHeight;
+        }
+        
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function hideError() {
+            errorDiv.style.display = 'none';
+        }
+        
+        function updateSelectedOutputLanguages() {
+            const checkboxes = outputLanguages.querySelectorAll('input[type="checkbox"]:checked');
+            selectedOutputLanguages = Array.from(checkboxes).map(cb => cb.value);
+            console.log('Selected output languages:', selectedOutputLanguages);
+        }
+        
+        async function translateAndSendCaption(captionData) {
+            const translations = {};
+            const sourceText = captionData.text;
+            
+            // Always include original text in English (or detected language)
+            const inputLang = getLanguageCodeFromInput(languageSelect.value);
+            translations[inputLang] = sourceText;
+            
+            // Translate to each selected language
+            for (const targetLang of selectedOutputLanguages) {
+                if (targetLang === inputLang) {
+                    // Same language, no translation needed
+                    translations[targetLang] = sourceText;
+                    continue;
+                }
+                
+                try {
+                    const translatedText = await translateText(sourceText, inputLang, targetLang);
+                    translations[targetLang] = translatedText;
+                } catch (error) {
+                    console.error(`Translation failed for ${targetLang}:`, error);
+                    // Fallback to original text
+                    translations[targetLang] = sourceText;
+                }
+            }
+            
+            // Send caption data with all translations
+            const multiLangCaptionData = {
+                ...captionData,
+                translations: translations,
+                languages: selectedOutputLanguages
+            };
+            
+            socket.emit('speech-data', multiLangCaptionData);
+        }
+        
+        async function translateText(text, fromLang, toLang) {
+            // Create cache key
+            const cacheKey = `${text}|${fromLang}|${toLang}`;
+            
+            // Check cache first
+            if (translationCache.has(cacheKey)) {
+                return translationCache.get(cacheKey);
+            }
+            
+            try {
+                // Use Google Translate API via public endpoint
+                const response = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${fromLang}&tl=${toLang}&dt=t&q=${encodeURIComponent(text)}`);
+                const result = await response.json();
+                
+                if (result && result[0] && result[0][0] && result[0][0][0]) {
+                    const translatedText = result[0][0][0];
+                    
+                    // Cache the translation
+                    translationCache.set(cacheKey, translatedText);
+                    
+                    // Limit cache size
+                    if (translationCache.size > 100) {
+                        const firstKey = translationCache.keys().next().value;
+                        translationCache.delete(firstKey);
+                    }
+                    
+                    return translatedText;
+                } else {
+                    throw new Error('Invalid translation response');
+                }
+            } catch (error) {
+                console.error('Translation error:', error);
+                // Return original text as fallback
+                return text;
+            }
+        }
+        
+        function getLanguageCodeFromInput(inputLangCode) {
+            // Convert speech recognition language codes to translation language codes
+            const mapping = {
+                'en-US': 'en',
+                'en-GB': 'en',
+                'es-ES': 'es',
+                'fr-FR': 'fr',
+                'de-DE': 'de',
+                'it-IT': 'it',
+                'pt-BR': 'pt',
+                'ja-JP': 'ja',
+                'ko-KR': 'ko',
+                'zh-CN': 'zh'
+            };
+            return mapping[inputLangCode] || 'en';
+        }
+        
+        // Socket events
+        socket.on('caption-update', (data) => {
+            console.log('Caption update received:', data);
+        });
+          socket.on('captions-cleared', () => {
+            captionPreview.textContent = 'Captions will appear here...';
+        });
+        
+        socket.on('session-started', (data) => {
+            if (data.success) {
+                currentSessionFile = data.filename;
+                sessionStatus.textContent = `📄 Session: ${data.filename}`;
+                sessionStatus.className = 'session-status active';
+                console.log('Session started:', data.filename);
+            } else {
+                sessionStatus.textContent = `❌ Session start failed: ${data.error}`;
+                sessionStatus.className = 'session-status error';
+                console.error('Session start failed:', data.error);
+            }
+        });
+        
+        socket.on('session-stopped', (data) => {
+            if (data.success) {
+                sessionStatus.textContent = 'No active session';
+                sessionStatus.className = 'session-status';
+                currentSessionFile = null;
+                console.log('Session stopped');
+            } else {
+                console.error('Session stop failed:', data.error);
+            }
+        });// Request microphone permission on page load
+        window.addEventListener('load', () => {
+            requestWakeLock();
+            setupMicrophoneMonitoring();
+            updateSelectedOutputLanguages(); // Initialize selected languages
+        });
+        
+        // Prevent the page from being throttled when minimized
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                console.log('Page hidden - maintaining background operation');
+                // Keep audio context running
+                if (audioContext && audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+            } else {
+                console.log('Page visible again');
+                requestWakeLock();
+            }
+        });
+        
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake lock activated');
+                    
+                    wakeLock.addEventListener('release', () => {
+                        console.log('Wake lock released');
+                    });
+                }
+            } catch (err) {
+                console.log('Wake lock failed:', err);
+            }
+        }
+        
+        async function getMicrophoneDevices() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                availableMicrophones = devices.filter(device => device.kind === 'audioinput');
+                
+                // Populate microphone dropdown
+                microphoneSelect.innerHTML = '';
+                
+                if (availableMicrophones.length === 0) {
+                    microphoneSelect.innerHTML = '<option value="">No microphones found</option>';
+                    return;
+                }
+                
+                availableMicrophones.forEach(device => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.textContent = device.label || `Microphone ${availableMicrophones.indexOf(device) + 1}`;
+                    microphoneSelect.appendChild(option);
+                });
+                
+                // Select the first microphone by default
+                if (availableMicrophones.length > 0) {
+                    microphoneSelect.value = availableMicrophones[0].deviceId;
+                }
+                
+            } catch (error) {
+                console.error('Error enumerating devices:', error);
+                microphoneSelect.innerHTML = '<option value="">Error loading microphones</option>';
+            }
+        }
+        
+        async function switchMicrophone(deviceId) {
+            console.log('Switching to microphone:', deviceId);
+            
+            // Stop current stream
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+            
+            // Stop current monitoring
+            stopMicrophoneLevelMonitoring();
+            
+            // Start with new microphone
+            try {
+                const constraints = {
+                    audio: {
+                        deviceId: deviceId ? { exact: deviceId } : undefined,
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    }
+                };
+                
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                setupAudioMonitoring(currentStream);
+                startMicrophoneLevelMonitoring();
+                
+                console.log('Successfully switched microphone');
+                hideError();
+                
+            } catch (error) {
+                console.error('Error switching microphone:', error);
+                showError('Failed to switch microphone. Please check your device permissions.');
+            }
+        }
+        
+        function setupAudioMonitoring(stream) {
+            try {
+                // Create or resume audio context
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                } else if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                
+                // Create analyser
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                
+                analyser.fftSize = 256;
+                analyser.smoothingTimeConstant = 0.8;
+                const bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                
+                microphone.connect(analyser);
+                
+            } catch (error) {
+                console.error('Error setting up audio monitoring:', error);
+                showError('Failed to set up audio monitoring.');
+            }
+        }
+        
+        async function setupMicrophoneMonitoring() {
+            try {
+                // First, get permission to enumerate devices
+                await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                // Get list of microphones
+                await getMicrophoneDevices();
+                
+                // Set up monitoring with default microphone
+                if (availableMicrophones.length > 0) {
+                    await switchMicrophone(availableMicrophones[0].deviceId);
+                }
+                
+                console.log('Microphone monitoring setup complete');
+                
+            } catch (error) {
+                console.error('Error setting up microphone monitoring:', error);
+                showError('Microphone access denied. Please allow microphone access and refresh the page.');
+            }
+        }
+          function startMicrophoneLevelMonitoring() {
+            if (micLevelInterval) {
+                clearInterval(micLevelInterval);
+            }
+            
+            micLevelInterval = setInterval(() => {
+                if (analyser && dataArray) {
+                    try {
+                        analyser.getByteFrequencyData(dataArray);
+                        
+                        // Calculate average volume
+                        let sum = 0;
+                        for (let i = 0; i < dataArray.length; i++) {
+                            sum += dataArray[i];
+                        }
+                        const average = sum / dataArray.length;
+                        const percentage = Math.min((average / 128) * 100, 100); // Normalize to 0-100%
+                        
+                        // Update microphone level bar
+                        microphoneLevel.style.width = percentage + '%';
+                        
+                        // Keep audio context active
+                        if (audioContext && audioContext.state === 'suspended') {
+                            audioContext.resume();
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error monitoring microphone level:', error);
+                    }
+                }
+            }, 50); // Faster updates for better responsiveness
+        }
+        
+        function stopMicrophoneLevelMonitoring() {
+            if (micLevelInterval) {
+                clearInterval(micLevelInterval);
+                micLevelInterval = null;
+            }
+            microphoneLevel.style.width = '0%';
+        }
+    </script>
+</body>
+</html>

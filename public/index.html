@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Captions - Home</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .info h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .info ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .info li {
+            margin: 5px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Live Captions</h1>
+        <p class="subtitle">Real-time speech-to-text for streaming</p>
+        
+        <div class="button-group">
+            <a href="/control" class="btn btn-primary">🎛️ Control Panel</a>
+            <a href="/captions" class="btn btn-secondary">📺 Captions Display (for OBS)</a>
+        </div>
+        
+        <div class="info">
+            <h3>How to use:</h3>
+            <ul>
+                <li><strong>Control Panel:</strong> Use this to start/stop speech recognition and control your microphone</li>
+                <li><strong>Captions Display:</strong> Add this URL as a Browser Source in OBS Studio</li>
+                <li>Make sure to allow microphone access when prompted</li>
+                <li>The captions will appear in real-time as you speak</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+Live Captions Session Log
+Started: 6/22/2025, 1:31:04 PM
+=====================================
+
+[1:31:08 PM] if I start it it does that
+[1:31:09 PM] This is a test caption to verify the system is working properly.
+[1:31:11 PM] This is a test caption to verify the system is working properly.
+[1:31:15 PM]  I pressed the test caption button twice
+[1:31:19 PM]  what happens if I do two languages though
+
+=====================================
+Session ended: 6/22/2025, 1:31:22 PM
+Duration: 0m 18s

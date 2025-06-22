@@ -1,0 +1,131 @@
+Live Captions Session Log
+Started: 6/22/2025, 1:32:32 PM
+=====================================
+
+[1:32:35 PM] does it do my font
+[1:32:38 PM]  no
+[1:33:23 PM] what
+[1:33:27 PM]  no it works just fine
+[1:33:40 PM]  is it my browser
+[1:33:49 PM]  oh yeah
+[1:34:36 PM] okay so it's going to show it here
+[1:34:49 PM]  what is it called when it's like temporarily there though
+[1:34:54 PM]  is there an actual thing is it yeah it's updating live
+[1:35:03 PM]  caption line
+[1:35:05 PM]  interim
+[1:36:03 PM] okay so what if I change this Max with to
+[1:36:06 PM]  500 pixels
+[1:36:18 PM]  and then I refresh it
+[1:36:28 PM]  okay so I want to wish to be exactly the size of the content
+[1:36:31 PM]  do I
+[1:36:36 PM]  or should I keep it this way because I like the way it looks
+[1:36:51 PM]  I guess that's the
+[1:36:55 PM]  way I could do it is just cropping
+[1:36:57 PM]  right here if I wanted to
+[1:37:02 PM]  since I could just make it show the top two
+[1:37:14 PM]  but let me talk a little bit longer and see what it shows there
+[1:37:20 PM]  and it will just show what I'm currently saying
+[1:37:24 PM]  yes
+[1:37:34 PM]  but what if I wanted to show a little bit of what I've said before
+[1:37:47 PM]  okie dokie then
+[1:38:06 PM] all right
+[1:38:25 PM]  okay now I'm talking here and what if I put the captions over here where my face is
+[1:38:36 PM]  is it okay if I put it here
+[1:38:48 PM]  what if I talk like this
+[1:38:53 PM]  it's a little too close to the edge I think
+[1:38:57 PM]  just a Teensy bit
+[1:39:00 PM]  just a little bit close to the edge
+[1:39:02 PM]  yeah
+[1:39:17 PM]  okay
+[1:39:28 PM]  oh
+[1:39:37 PM]  no I still wanted it there
+[1:39:43 PM]  how's that look
+[1:39:46 PM]  is it smaller
+[1:40:05 PM] how about this
+[1:40:10 PM]  okay yep
+[1:40:38 PM]  so if I'm talking normally into the microphone like this it'll show up for a little while and if I talk for a long time does it make a really big box I'm very curious if there's a Max text limit or if it just stops listening to me eventually or nope it just blows over the top like that that's cool
+[1:40:57 PM] so I'm guessing I'll just create a Max height
+[1:41:22 PM] 100 pixel look like for the max height is that okay
+[1:41:23 PM]  oh gosh
+[1:41:34 PM]  how does it look when I talk a lot if I talk a lot and I say a bunch of things is it going to go up and up and up oh my goodness look at all that speech data received
+[1:41:51 PM]  okay
+[1:41:55 PM]  here it is
+[1:42:05 PM]  where is the box oh
+[1:42:10 PM]  what if I refresh
+[1:42:12 PM]  yeah
+[1:42:14 PM]  no
+[1:42:38 PM] oh I see
+[1:42:51 PM]  okay what if I do it like that
+[1:42:54 PM]  does that work yes
+[1:42:57 PM]  what
+[1:42:59 PM]  what is that
+[1:43:19 PM] there you go
+[1:43:21 PM]  you're welcome
+[1:43:43 PM] oh yeah look at that little butt
+[1:44:07 PM] I'm not sure what
+[1:44:25 PM] so when I talk here does it do it
+[1:44:38 PM]  that's pretty cool
+[1:44:52 PM]  so if I say that
+[1:44:59 PM]  but then I start talking again and does it show what I'm saying live yes it does it'll show it all right there
+[1:45:06 PM]  but the biggest it can be is what I don't know cuz it's messed up if I'm talking and it shows
+[1:45:16 PM]  cuz it will always show right here and it will go over the big one yes that's true so I just want to show this I don't really care
+[1:45:31 PM]  is there an Italian version
+[1:45:35 PM]  yes
+[1:45:38 PM]  C
+[1:45:50 PM]  c period comma exclamation point
+[1:45:53 PM]  no
+[1:46:07 PM]  however I can see here
+[1:46:22 PM]  it is a little bit different
+[1:46:38 PM]  so the way it works
+[1:47:00 PM] my goodness
+[1:47:47 PM] some caption line
+[1:47:50 PM]  has a max height
+[1:48:21 PM] and does it have a maximum height again
+[1:48:30 PM]  no I don't think it did
+[1:48:35 PM]  how about this
+[1:48:40 PM]  okay I think I did it right
+[1:48:48 PM]  it is the same height as the other ones but what happens if I talk a little bit too much no it does break that
+[1:49:11 PM]  okay now
+[1:49:17 PM]  I forget what change I made
+[1:49:28 PM]  oh that's right it's going to be maxed with the content
+[1:49:51 PM] there's that
+[1:49:57 PM]  and then
+[1:50:10 PM]  does that work
+[1:50:14 PM]  oh my goodness I don't think it did
+[1:50:34 PM] What If instead of Max with it's just with
+[1:50:39 PM]  okay that does work
+[1:51:53 PM] okay did that work
+[1:52:05 PM]  what is this though
+[1:52:23 PM]  is captions container
+[1:52:50 PM] what about now
+[1:52:53 PM]  nope
+[1:53:20 PM]  okay does it look better this way
+[1:53:24 PM]  let's see
+[1:53:32 PM]  those were unfortunately the same size so I'm not too sure oh God look at that does
+[1:53:47 PM]  okay does it do the same
+[1:53:51 PM]  is it the same issue
+[1:54:00 PM]  no I don't think it is and I can do this one if I want to and it won't change
+[1:54:28 PM]  does it do what I want to now
+[1:54:34 PM]  like do they stay in the center of this thing oh God no
+[1:54:40 PM]  that's very different from what I actually wanted to do
+[1:54:57 PM]  but I don't know it's kind of cool if I talk too much it's going to go right off the side of it because if I talk a lot it's just going to keep going and going and going and it doesn't know when to stop it's just going to fill up the entire screen if I keep chatting
+[1:55:19 PM] all right
+[1:55:32 PM]  is it taking up a lot of my CPU to do this yeah it takes about 40 to 30% of my CPU while I'm talking that's nuts
+[1:55:44 PM]  well this is definitely going to have to go on the downstairs computer
+[1:56:07 PM] dokie dokie hopefully this makes it go back to normal
+[1:56:12 PM]  yep it goes upwards okay
+[1:56:35 PM] okay what if I do it like this
+[1:56:41 PM]  does it work
+[1:56:47 PM]  I don't think it does I mean it kind of does
+[1:57:13 PM] hey does it do the right thing
+[1:57:18 PM]  it does it right there but not
+[1:57:22 PM]  not the way I wanted it to
+[1:57:28 PM]  yeah I don't think so
+[1:58:20 PM] okay I guess this is good for now
+[1:58:56 PM] okay let's make it do all of the languages
+[1:59:43 PM] is it because I did the max height
+[1:59:47 PM]  no I don't think that would be it
+
+=====================================
+Session ended: 6/22/2025, 2:00:14 PM
+Duration: 27m 42s
