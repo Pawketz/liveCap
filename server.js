@@ -171,8 +171,32 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`Live Captions Server running on http://localhost:${PORT}`);
-  console.log(`Control Panel: http://localhost:${PORT}/control`);
-  console.log(`Captions Display (for OBS): http://localhost:${PORT}/captions`);
+server.listen(PORT, '0.0.0.0', () => {
+  const os = require('os');
+  const networkInterfaces = os.networkInterfaces();
+  let localIP = 'localhost';
+  
+  // Find the local IP address
+  for (const interfaceName in networkInterfaces) {
+    const interfaces = networkInterfaces[interfaceName];
+    for (const iface of interfaces) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        localIP = iface.address;
+        break;
+      }
+    }
+  }
+  
+  console.log(`Live Captions Server running on:`);
+  console.log(`  Local:    http://localhost:${PORT}`);
+  console.log(`  Network:  http://${localIP}:${PORT}`);
+  console.log(`Control Panel: http://${localIP}:${PORT}/control`);
+  console.log(`Captions Display (for OBS): http://${localIP}:${PORT}/captions`);
+  console.log(`Interim Captions: http://${localIP}:${PORT}/interim-captions`);
+  console.log('');
+  console.log('⚠️  WARNING: Microphone access from remote computers requires HTTPS!');
+  console.log('   For microphone access from other devices, use one of these solutions:');
+  console.log('   1. Install ngrok: npm install -g ngrok && ngrok http 3000');
+  console.log('   2. Set up HTTPS with SSL certificates');
+  console.log('   3. Use Chrome with --unsafely-treat-insecure-origin-as-secure flag');
 });
