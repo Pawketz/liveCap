@@ -1,30 +1,16 @@
 const express = require('express');
 const http = require('http');
-const https = require('https');
 const socketIo = require('socket.io');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs').promises;
-const fsSync = require('fs');
 const os = require('os');
 
 const app = express();
 
-// Try to load SSL certificates
-let httpsOptions = null;
-try {
-    httpsOptions = {
-        key: fsSync.readFileSync(path.join(__dirname, 'ssl', 'key.pem')),
-        cert: fsSync.readFileSync(path.join(__dirname, 'ssl', 'cert.pem'))
-    };
-    console.log('✅ SSL certificates loaded successfully');
-} catch (err) {
-    console.log('⚠️  SSL certificates not found, HTTPS will not be available');
-}
-
-// Create HTTP server
-const httpServer = http.createServer(app);
-const io = socketIo(httpServer, {
+// Create HTTP server (Render will handle HTTPS automatically)
+const server = http.createServer(app);
+const io = socketIo(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"]  }
@@ -186,14 +172,13 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3000;
-const HTTPS_PORT = process.env.HTTPS_PORT || 3001;
 
-// Start HTTP server
-httpServer.listen(PORT, '0.0.0.0', () => {
+// Start server
+server.listen(PORT, '0.0.0.0', () => {
   const networkInterfaces = os.networkInterfaces();
   let localIP = 'localhost';
   
-  // Find the local IP address
+  // Find the local IP address for local development
   for (const interfaceName in networkInterfaces) {
     const interfaces = networkInterfaces[interfaceName];
     for (const iface of interfaces) {
@@ -204,96 +189,22 @@ httpServer.listen(PORT, '0.0.0.0', () => {
     }
   }
   
-  console.log(`🚀 Live Captions Server running on:`);
-  console.log(`  HTTP Local:    http://localhost:${PORT}`);
-  console.log(`  HTTP Network:  http://${localIP}:${PORT}`);
+  console.log(`🚀 Live Captions Server running on port ${PORT}`);
   
-  if (httpsOptions) {
-    console.log(`  HTTPS Local:   https://localhost:${HTTPS_PORT}`);
-    console.log(`  HTTPS Network: https://${localIP}:${HTTPS_PORT}`);
-  }
-  
-  console.log(`\n📱 Access URLs:`);
-  console.log(`  Control Panel: http://${localIP}:${PORT}/control`);
-  console.log(`  Captions Display: http://${localIP}:${PORT}/captions`);
-  console.log(`  Interim Captions: http://${localIP}:${PORT}/interim-captions`);
-  
-  if (httpsOptions) {
-    console.log(`\n🔒 HTTPS URLs (for microphone access):`);
-    console.log(`  Control Panel: https://${localIP}:${HTTPS_PORT}/control`);
-    console.log(`  Captions Display: https://${localIP}:${HTTPS_PORT}/captions`);
-    console.log(`  Interim Captions: https://${localIP}:${HTTPS_PORT}/interim-captions`);
+  if (process.env.RENDER) {
+    // Running on Render - HTTPS is automatic
+    console.log(`📱 Production URLs (HTTPS automatically provided by Render):`);
+    console.log(`  Control Panel: https://your-app.onrender.com/control`);
+    console.log(`  Captions Display: https://your-app.onrender.com/captions`);
+    console.log(`  Interim Captions: https://your-app.onrender.com/interim-captions`);
   } else {
-    console.log('\n⚠️  For microphone access from remote computers, generate SSL certificates:');
-    console.log('   node generate-ssl.js');
+    // Local development
+    console.log(`� Local Development URLs:`);
+    console.log(`  Local Access: http://localhost:${PORT}`);
+    console.log(`  Network Access: http://${localIP}:${PORT}`);
+    console.log(`  Control Panel: http://${localIP}:${PORT}/control`);
+    console.log(`  Captions Display: http://${localIP}:${PORT}/captions`);
+    console.log(`  Interim Captions: http://${localIP}:${PORT}/interim-captions`);
+    console.log(`\n⚠️  Note: For microphone access from remote devices, use HTTPS or deploy to Render`);
   }
 });
-
-// Start HTTPS server if certificates are available
-if (httpsOptions) {
-  const httpsServer = https.createServer(httpsOptions, app);
-  
-  // Add Socket.IO to HTTPS server as well
-  const httpsIo = socketIo(httpsServer, {
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"]
-    }
-  });
-  
-  // Copy all socket event handlers to HTTPS server
-  httpsIo.on('connection', (socket) => {
-    console.log('User connected via HTTPS:', socket.id);
-
-    // Start session handler
-    socket.on('start-session', async () => {
-      try {
-        const sessionFile = await startSession();
-        socket.emit('session-started', { success: true, sessionFile });
-        console.log('Session started via HTTPS');
-      } catch (error) {
-        socket.emit('session-started', { success: false, error: error.message });
-      }
-    });
-
-    // Stop session handler
-    socket.on('stop-session', async () => {
-      try {
-        await stopSession();
-        socket.emit('session-stopped', { success: true });
-        console.log('Session stopped via HTTPS');
-      } catch (error) {
-        socket.emit('session-stopped', { success: false, error: error.message });
-      }
-    });
-
-    // Handle speech data from control panel
-    socket.on('speech-data', async (data) => {
-      console.log('Speech data received via HTTPS:', data);
-      
-      // Log final captions to file
-      if (data.isFinal) {
-        await logCaption(data);
-      }
-      
-      // Broadcast to all connected clients on both HTTP and HTTPS
-      io.emit('caption-update', data);
-      httpsIo.emit('caption-update', data);
-    });
-
-    // Handle caption clear
-    socket.on('clear-captions', () => {
-      console.log('Clearing captions via HTTPS');
-      io.emit('captions-cleared');
-      httpsIo.emit('captions-cleared');
-    });
-
-    socket.on('disconnect', () => {
-      console.log('User disconnected via HTTPS:', socket.id);
-    });
-  });
-  
-  httpsServer.listen(HTTPS_PORT, '0.0.0.0', () => {
-    console.log(`🔒 HTTPS Server running on port ${HTTPS_PORT}`);
-  });
-}
